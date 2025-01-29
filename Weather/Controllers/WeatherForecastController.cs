@@ -11,10 +11,14 @@ public class WeatherForecastController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
+    private readonly IForecast _forecast;
     private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(
+        IForecast forecast,
+        ILogger<WeatherForecastController> logger)
     {
+        _forecast = forecast;
         _logger = logger;
     }
 
@@ -28,5 +32,11 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+
+    [HttpGet("{marketId}")]
+    public WeatherForecast GetForMarket(string marketId)
+    {
+        return _forecast.GetForMarket(marketId);
     }
 }
